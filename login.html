@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Centro Tecnológico - Login & Registro</title>
+  <style>
+    body {
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      background: #0d1b2a; /* Azul oscuro */
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      color: #fff;
+    }
+
+    .container {
+      background: #fff;
+      width: 550px;
+      padding: 50px;
+      border-radius: 18px;
+      box-shadow: 0 10px 35px rgba(0,0,0,0.8);
+      text-align: center;
+      animation: fadeIn 0.7s ease-in-out;
+      color: #000;
+    }
+
+    h2 { margin-bottom: 25px; color: #003366; }
+
+    .form-group { margin-bottom: 25px; text-align: left; }
+
+    label { font-weight: bold; display: block; margin-bottom: 8px; color: #333; }
+
+    input {
+      width: 100%;
+      padding: 14px;
+      border: 2px solid #ddd;
+      border-radius: 8px;
+      font-size: 16px;
+      transition: 0.3s;
+    }
+
+    input:focus { border-color: #003366; outline: none; box-shadow: 0 0 8px rgba(0,51,102,0.5); }
+
+    button {
+      width: 100%;
+      padding: 14px;
+      background: #003366;
+      border: none;
+      color: #fff;
+      font-size: 17px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.3s, transform 0.2s;
+    }
+
+    button:hover { background: #001f4d; transform: scale(1.03); }
+
+    .toggle { margin-top: 25px; font-size: 15px; color: #555; }
+
+    .toggle a { color: #003366; font-weight: bold; cursor: pointer; text-decoration: none; }
+
+    .toggle a:hover { text-decoration: underline; }
+
+    .message { margin-top: 18px; font-size: 15px; font-weight: bold; }
+
+    .error { color: red; }
+
+    .success { color: green; }
+
+    @keyframes fadeIn { from { opacity:0; transform:scale(0.95);} to {opacity:1; transform:scale(1);} }
+  </style>
+</head>
+<body>
+
+  <div class="container" id="loginContainer">
+    <!-- LOGIN -->
+    <div id="loginForm">
+      <h2>Iniciar Sesión</h2>
+      <div class="form-group">
+        <label for="loginEmail">Correo</label>
+        <input type="email" id="loginEmail" placeholder="ejemplo@correo.com">
+      </div>
+      <div class="form-group">
+        <label for="loginPassword">Contraseña</label>
+        <input type="password" id="loginPassword" placeholder="********">
+      </div>
+      <button onclick="login()">Ingresar</button>
+      <div id="loginMessage" class="message"></div>
+      <div class="toggle">
+        ¿No tienes cuenta? <a onclick="toggleForms()">Regístrate aquí</a>
+      </div>
+    </div>
+
+    <!-- REGISTRO -->
+    <div id="registerForm" style="display: none;">
+      <h2>Registro</h2>
+      <div class="form-group">
+        <label for="registerName">Nombre</label>
+        <input type="text" id="registerName" placeholder="Tu nombre completo">
+      </div>
+      <div class="form-group">
+        <label for="registerEmail">Correo</label>
+        <input type="email" id="registerEmail" placeholder="ejemplo@correo.com">
+      </div>
+      <div class="form-group">
+        <label for="registerPassword">Contraseña</label>
+        <input type="password" id="registerPassword" placeholder="Mínimo 8 caracteres">
+      </div>
+      <button onclick="register()">Registrar</button>
+      <div id="registerMessage" class="message"></div>
+      <div class="toggle">
+        ¿Ya tienes cuenta? <a onclick="toggleForms()">Inicia sesión</a>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Usuarios iniciales
+    let users = [
+      { email: "gomeleadro@gmail.com", password: "1237035" },
+      { email: "luisangel@gmail.com", password: "1237048" }
+    ];
+
+    function toggleForms() {
+      const loginForm = document.getElementById("loginForm");
+      const registerForm = document.getElementById("registerForm");
+      loginForm.style.display = loginForm.style.display === "none" ? "block" : "none";
+      registerForm.style.display = registerForm.style.display === "none" ? "block" : "none";
+    }
+
+    function login() {
+      const email = document.getElementById("loginEmail").value.trim();
+      const password = document.getElementById("loginPassword").value.trim();
+      const message = document.getElementById("loginMessage");
+
+      if (!email || !password) {
+        message.textContent = "Por favor, completa todos los campos.";
+        message.className = "message error";
+        return;
+      }
+
+      const user = users.find(u => u.email === email && u.password === password);
+
+      if (user) {
+        // Guardar usuario en localStorage y redirigir
+        localStorage.setItem("loggedUser", email);
+        window.location.href = "welcome.html";
+      } else {
+        message.textContent = "Correo o contraseña incorrectos ❌";
+        message.className = "message error";
+      }
+    }
+
+    function register() {
+      const name = document.getElementById("registerName").value.trim();
+      const email = document.getElementById("registerEmail").value.trim();
+      const password = document.getElementById("registerPassword").value.trim();
+      const message = document.getElementById("registerMessage");
+
+      if (!name || !email || !password) {
+        message.textContent = "Por favor, completa todos los campos.";
+        message.className = "message error";
+      } else if (password.length < 8) {
+        message.textContent = "La contraseña debe tener al menos 8 caracteres.";
+        message.className = "message error";
+      } else if (users.find(u => u.email === email)) {
+        message.textContent = "Este correo ya está registrado.";
+        message.className = "message error";
+      } else {
+        users.push({ email, password });
+        message.textContent = "Usuario registrado con éxito 🎉";
+        message.className = "message success";
+      }
+    }
+  </script>
+
+</body>
+</html>

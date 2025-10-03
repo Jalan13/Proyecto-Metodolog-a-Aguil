@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bienvenida - Centro Tecnológico</title>
+  <style>
+    body {
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      background: #0d1b2a; /* Azul oscuro */
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      color: #fff;
+      flex-direction: column;
+      text-align: center;
+    }
+
+    h1 { font-size: 36px; margin-bottom: 20px; }
+    p { font-size: 24px; margin-bottom: 30px; }
+
+    button {
+      padding: 12px 25px;
+      font-size: 18px;
+      border: none;
+      border-radius: 8px;
+      background: #003366;
+      color: #fff;
+      cursor: pointer;
+      transition: background 0.3s, transform 0.2s;
+    }
+
+    button:hover { background: #001f4d; transform: scale(1.05); }
+  </style>
+</head>
+<body>
+
+  <h1>¡Bienvenido al Centro Tecnológico!</h1>
+  <p id="userEmail"></p>
+  <button onclick="logout()">Cerrar sesión</button>
+
+  <script>
+    const email = localStorage.getItem("loggedUser");
+    const userEmailEl = document.getElementById("userEmail");
+
+    if (!email) {
+      // Si no hay usuario logueado, regresar al login
+      window.location.href = "login.html";
+    } else {
+      userEmailEl.textContent = `Has iniciado sesión como: ${email}`;
+    }
+
+    function logout() {
+      localStorage.removeItem("loggedUser");
+      window.location.href = "login.html";
+    }
+  </script>
+
+</body>
+</html>
+ 
